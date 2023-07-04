@@ -147,7 +147,8 @@ get_notifs() {
 }
 
 print_notifs() {
-    local all_notifs page_num page new_notifs graphql_query_discussion
+    local all_notifs page_num page new_notifs graphql_query_discussion filler
+    filler="     "
     all_notifs=''
     page_num=1
     graphql_query_discussion=$'query ($filter: String!) { search(query: $filter, type: DISCUSSION, first: 1) { nodes { ... on Discussion { number }}}}'
@@ -184,7 +185,7 @@ print_notifs() {
                 fi
                 printf "\n%s\t%s\t%s\t%s\t%s\t%s\t%s %b%s%b %s\t%s\n" \
                     "$iso8601" "$thread_id" "$thread_state" "$comment_url" "$timefmt" \
-                    "$repo" "$type" "$GREEN" "$number" "$NC" "$unread_symbol" "$title"
+                    "$repo" "$type" "$GREEN" "${number}${filler:${#number}}" "$NC" "$unread_symbol" "$title"
             done
         ) || die "Something went wrong"
         all_notifs="$all_notifs$new_notifs"
@@ -308,19 +309,21 @@ select_notif() {
             --ansi --no-multi --with-nth 5.. \
             --delimiter '\s+' --print-query \
             --reverse --info=inline --pointer="▶" \
-            --border horizontal --color "border:dim" \
-            --header "? help · esc quit" --color "header:green:italic:dim" \
-            --prompt "GitHub Notifications > " --color "prompt:80,info:40" \
+            --border horizontal \
+            --header "? help · esc quit" \
+            --prompt "GitHub Notifications > " \
+            --color=bg+:#31353f,bg:#282c34,spinner:#c678dd,hl:#5c6370,fg:#abb2bf,header:#5c6370,info:#c678dd,pointer:#c678dd,marker:#c678dd,fg+:#abb2bf,preview-bg:#282c34,prompt:#c678dd,hl+:#c678dd \
             --bind "change:first" \
             --bind "?:toggle-preview+change-preview:print_help_text" \
-            --bind "ctrl-b:execute-silent:open_in_browser {}" \
-            --bind "ctrl-d:toggle-preview+change-preview:if grep -q PullRequest <<<{8}; then gh pr diff {9} --repo {7}  | diff_pager; else view_notification {}; fi" \
-            --bind "ctrl-p:toggle-preview+change-preview:if grep -q PullRequest <<<{8}; then gh pr diff {9} --patch --repo {7} | diff_pager; else view_notification {}; fi" \
-            --bind "ctrl-r:execute-silent(mark_all_read {})+reload:print_notifs || true" \
-            --bind "ctrl-t:execute-silent(mark_individual_read {})+reload:print_notifs || true" \
+            --bind "ctrl-o:execute-silent:open_in_browser {}" \
+            --bind "ctrl-f:toggle-preview+change-preview:if grep -q PullRequest <<<{8}; then gh pr diff {9} --repo {7}  | diff_pager; else view_notification {}; fi" \
+            --bind "ctrl-i:toggle-preview+change-preview:if grep -q PullRequest <<<{8}; then gh pr diff {9} --patch --repo {7} | diff_pager; else view_notification {}; fi" \
+            --bind "ctrl-a:execute-silent(mark_all_read {})+reload:print_notifs || true" \
+            --bind "ctrl-r:execute-silent(mark_individual_read {})+reload:print_notifs || true" \
             --bind "tab:toggle-preview+change-preview:view_notification {}" \
             --bind "btab:change-preview-window(75%:nohidden|75%:down:nohidden:border-top|nohidden)" \
-            --preview-window wrap:"$preview_window_visibility":50%:right:border-left \
+            --bind "ctrl-u:preview-half-page-up,ctrl-d:preview-half-page-down" \
+            --preview-window wrap:"$preview_window_visibility":75%:bottom:border-top \
             --preview "view_notification {}" \
             --expect "enter,esc,ctrl-x"
     )
