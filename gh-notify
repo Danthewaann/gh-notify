@@ -312,7 +312,7 @@ select_notif() {
             --border horizontal \
             --header "? help · esc quit" \
             --prompt "GitHub Notifications > " \
-            --color="$FZF_DEFAULT_OPTS" \
+            "$FZF_DEFAULT_OPTS" \
             --bind "change:first" \
             --bind "?:toggle-preview+change-preview:print_help_text" \
             --bind "ctrl-o:execute-silent:open_in_browser {}" \
