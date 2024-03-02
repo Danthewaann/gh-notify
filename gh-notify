@@ -55,13 +55,13 @@ ${WHITE_BOLD}Key Bindings fzf${NC}
   ${GREEN}?        ${NC}  toggle help
   ${GREEN}enter    ${NC}  print and mark the notification as read and quit
   ${GREEN}tab      ${NC}  toggle preview notification
-  ${GREEN}shift+tab${NC}  change preview window size
-  ${GREEN}shift+↑↓ ${NC}  scroll the preview up/ down
+  ${GREEN}ctrl+a   ${NC}  mark all displayed notifications as read and reload
   ${GREEN}ctrl+b   ${NC}  open notification in the browser
-  ${GREEN}ctrl+d   ${NC}  view diff
-  ${GREEN}ctrl+p   ${NC}  view diff in patch format
-  ${GREEN}ctrl+r   ${NC}  mark all displayed notifications as read and reload
-  ${GREEN}ctrl+t   ${NC}  mark notification as read and reload
+  ${GREEN}ctrl+d   ${NC}  scroll the preview down
+  ${GREEN}ctrl+f   ${NC}  view diff
+  ${GREEN}ctrl+i   ${NC}  view diff in patch format
+  ${GREEN}ctrl+r   ${NC}  mark notification as read and reload
+  ${GREEN}ctrl+u   ${NC}  scroll the preview up
   ${GREEN}ctrl+x   ${NC}  write a comment with the editor and quit
   ${GREEN}esc      ${NC}  quit
 
